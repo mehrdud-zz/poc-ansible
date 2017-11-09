@@ -1,0 +1,26 @@
+---
+- name: Backup web servers
+  hosts: web
+  tasks:
+    
+    - name: include var file
+      include_vars: 
+         file: deployment_packages.yml
+         
+    - name: Create 00Backup folder
+      win_file:
+        path: '{{backupPath}}'
+        state: directory   
+        
+    - name: Create backup folder
+      win_file:
+        path: '{{backupPath}}\{{deploymentId}}\{{item.name}}'
+        state: directory
+      with_items:
+        "{{deploymentPackages}}"        
+
+    - name: Backup deploymentApp
+      win_command: 'PowerShell.exe -File "{{powershellPath}}\\backup.ps1" {{item.folder}} {{backupPath}}\{{deploymentId}}\{{item.name}}'
+      with_items:
+        "{{deploymentPackages}}"        
+        

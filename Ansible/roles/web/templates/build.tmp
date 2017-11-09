@@ -1,0 +1,12 @@
+<html>
+<title>{{item.name}} - Release-{{item.releaseId}} - {{deploymentId}}</title>
+<body>
+<strong>{{item.name}} - Release-{{item.releaseId}} - {{deploymentId}}</strong>
+<ul>
+<li><small>{{item.releaseId}}</small></li>
+<li><small>{{deploymentId}}</small></li>
+<li><small>{{item.name}} - {{item.releaseId}}</small></li>
+<li><small>#4</small></li>
+</ul>
+</body>
+</html>

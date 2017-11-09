@@ -1,0 +1,4 @@
+--- 
+  - include_tasks: prerequisites_check.yml  
+  - include_tasks: backup_websites.yml
+  - include_tasks: deploy_websites.yml 

@@ -1,0 +1,40 @@
+---
+- name: check web servers are ready
+  hosts: web 
+  tasks:       
+    - name: include var file
+      include_vars: 
+         file: deployment_packages.yml
+         
+    - name: ping servers
+      win_ping:
+        data: crash
+ 
+    - name: Ensure "Web Server (IIS)" feature is installed
+      win_feature: 
+        name: Web-Server
+        state: present 
+        include_sub_features: True
+        include_management_tools: True
+        restart: True
+
+
+        
+    - name: Ensure IIS service is started
+      win_service: 
+        name: W3SVC
+        state: started
+   
+    - name: Ensure Microsoft .Net Framework 4.5.2 is installed
+      win_chocolatey:
+        name: dotnet4.5.2
+ 
+    - name: Create PowerShell folder
+      win_file:
+        path: '{{powershellPath}}'
+        state: directory
+      
+    - name: Download powershell scritps
+      win_get_url:
+        url: 'https://github.com/mehrdud/ansible/blob/master/powershellScripts/backup.ps1'
+        dest: '{{powershellPath}}\backup.ps1'

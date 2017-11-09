@@ -1,0 +1,26 @@
+--- 
+    - name: include var file 
+      include_vars: 
+         file: deployment_packages.yml 
+         
+    - name: Warn of impending deployment
+      win_say:
+        msg: Warning, deployment commencing in 5 minutes, please log out.
+         
+         
+    - name: Create 00Backup folder 
+      win_file:
+        path: '{{backupPath}}'
+        state: directory    
+        
+    - name: Create backup folder 
+      win_file:
+        path: '{{backupPath}}\{{item.releaseId}}\{{deploymentId}}\{{item.name}}'
+        state: directory
+      with_items:
+        "{{deploymentPackages}}"       
+
+    - name: Backup existing version of the app 
+      win_command: 'PowerShell.exe -File "{{powershellPath}}\\backup.ps1" {{item.folder}} {{backupPath}}\{{item.releaseId}}\{{deploymentId}}\{{item.name}}'
+      with_items:
+        "{{deploymentPackages}}"      

@@ -1,0 +1,13 @@
+---
+[web]
+10.0.0.3
+10.0.0.4
+
+[api]
+10.0.0.5
+
+[all:vars]
+targetEnvironment="staging"
+powershellPath="c:\\inetpub\\powershellScripts"
+backupPath="C:\\inetpub\\00Backup" 
+deploymentId="{{lookup('pipe','date +%Y%m%d%H%M')}}"   

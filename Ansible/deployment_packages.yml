@@ -1,0 +1,18 @@
+deploymentPackages:  
+  - name: 'DarkCocoaPortal'
+    folder: 'C:\inetpub\wwwroot\DarkCocoaPortal'
+    ip: ''
+    port: 5050
+    packageName: "DarkCocoaPortal.zip"    
+    sourcePackage: "https://github.com/mehrdud/DarkCocoa/raw/master/DeploymentPackages/DarkCocoaPortal/DarkCocoaPortal.zip"
+    sourceConfigFile: "https://raw.githubusercontent.com/mehrdud/DarkCocoa/master/DeploymentPackages/DarkCocoaPortal/Web.live.config"
+    releaseId: 2.291
+    
+  - name: 'DarkCocoaReports'
+    folder: 'C:\inetpub\wwwroot\DarkCocoaReports'
+    ip: ''
+    port: 5060
+    packageName: "DarkCocoaReports.zip"    
+    sourcePackage: "https://github.com/mehrdud/DarkCocoa/raw/master/DeploymentPackages/DarkCocoaReports/DarkCocoaReports.zip"    
+    sourceConfigFile: "https://raw.githubusercontent.com/mehrdud/DarkCocoa/master/DeploymentPackages/DarkCocoaReports/Web.live.config"
+    releaseId: 2.291

@@ -1,0 +1,78 @@
+---     
+- name: check web servers are ready
+  hosts: web    
+    
+  tasks:
+    - name: include var file
+      include_vars: 
+         file: deployment_packages.yml
+      
+    - name: Set facts
+      set_fact: 
+        deploymentDate: "{{lookup('pipe','date +%Y%m%d%H%M')}}" 
+        
+    - name: Create IIS Folder
+      win_file:
+        path: "{{item.folder}}"
+        state: directory              
+      with_items:
+        "{{deploymentPackages}}"
+     
+     
+    - name: Create "{{item.name}}" IIS WebSite 
+      win_iis_website:
+        name: "{{item.name}}"
+        state: stopped
+        port: "{{item.port | int}}"
+        physical_path: "{{item.folder}}"
+      with_items:
+        "{{deploymentPackages}}"
+        
+    - name: Add Firewall rule to allow "{{item.name}}" on TCP port "{{targetPort| int}}"
+      win_firewall_rule: 
+        name: "{{item.name}}"
+        enable: yes
+        state: present
+        localport: "{{item.port | int}}"
+        action: allow
+        direction: In
+        protocol: TCP
+        force: True
+      with_items:
+        "{{deploymentPackages}}"        
+      
+    - name: Download deployment package
+      win_get_url:
+         url: "{{item.sourcePackage}}"
+         dest: "{{item.folder}}\\{{item.packageName}}"
+      with_items:
+        "{{deploymentPackages}}"          
+    
+    - name: Unzip deployment package
+      win_unzip: 
+        src: "{{item.folder}}\\{{item.packageName}}"
+        dest: "{{item.folder}}"
+      with_items:
+        "{{deploymentPackages}}"          
+    
+    - name: Remove downloaded file
+      win_file:
+        path: "{{item.folder}}\\{{item.packageName}}"
+        state: absent
+      with_items:
+        "{{deploymentPackages}}"           
+    
+    - name: Get config file 
+      win_get_url:
+         url: "{{item.sourceConfigFile}}"
+         dest: "{{item.folder}}\\web.config"
+      with_items:
+        "{{deploymentPackages}}"         
+         
+    - name: Start IIS WebSite 
+      win_iis_website:
+        name: "{{item.name}}"
+        state: started  
+      with_items:
+        "{{deploymentPackages}}"        
+       
